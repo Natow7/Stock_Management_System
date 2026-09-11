@@ -8,6 +8,7 @@ const router = express.Router();
 router.use(authenticate);
 
 router.get("/", asyncHandler(ctrl.list));
+router.get("/:id/availability", asyncHandler(ctrl.getAvailability));
 router.post("/", requireRole("Administrator", "Property Registration Officer"), asyncHandler(ctrl.create));
 
 module.exports = router;

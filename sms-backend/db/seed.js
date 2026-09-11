@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const { pool } = require("../src/config/db");
 
 const DEMO_PASSWORD = "Demo@1234";
+const SIMPLE_PASSWORD = "password"; // For easy demo accounts
 
 async function seed() {
   const client = await pool.connect();
@@ -13,6 +14,8 @@ async function seed() {
 
     console.log("Seeding users...");
     const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+    const simplePasswordHash = await bcrypt.hash(SIMPLE_PASSWORD, 10);
+    
     const userRows = [
       ["Abel Tesfaye", "abel.admin@university.edu", "Administrator"],
       [
@@ -44,9 +47,20 @@ async function seed() {
         "girum.security@university.edu",
         "Campus Security Officer",
       ],
+      // NEW: Easy-to-remember demo accounts
+      ["Demo Admin", "admin@example.com", "Administrator"],
+      ["Demo PRO", "pro@example.com", "Property Registration Officer"],
+      ["Demo Stock Clerk", "clerk@example.com", "Stock Clerk"],
+      ["Demo Store Head", "storehead@example.com", "Store Head"],
+      ["Demo TEC", "tec@example.com", "Technical Evaluation Committee"],
+      ["Demo PAO", "pao@example.com", "Property Administration Officer"],
+      ["Demo Dept Head", "depthead@example.com", "Department Head"],
     ];
     const users = {};
     for (const [name, email, role] of userRows) {
+      // Use simple password for @example.com accounts
+      const hash = email.includes("@example.com") ? simplePasswordHash : passwordHash;
+      
       const res = await client.query(
         `INSERT INTO users (name, email, password_hash, role, department)
          VALUES ($1, $2, $3, $4, $5)
@@ -61,7 +75,7 @@ async function seed() {
         [
           name,
           email,
-          passwordHash,
+          hash,
           role,
           role === "Department Head" ? "Engineering College" : null,
         ],

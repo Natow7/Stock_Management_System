@@ -106,4 +106,73 @@ async function create(req, res) {
   res.status(201).json(result);
 }
 
-module.exports = { list, create };
+/**
+ * Get item availability across all stores
+ * Returns stores that have stock, with available quantities
+ */
+async function getAvailability(req, res) {
+  const { id } = req.params;
+
+  // Get item details
+  const itemResult = await pool.query(
+    `SELECT id, code, name, unit, qty_on_hand 
+     FROM items 
+     WHERE id = $1`,
+    [id]
+  );
+
+  if (itemResult.rows.length === 0) {
+    throw new ApiError(404, "Item not found.");
+  }
+
+  const item = itemResult.rows[0];
+
+  // Get availability by store with optimized query
+  const availabilityResult = await pool.query(
+    `SELECT 
+      s.id AS store_id,
+      s.name AS store_name,
+      il.bin,
+      COALESCE(
+        (SELECT bce.balance 
+         FROM bin_card_entries bce
+         JOIN bin_cards bc ON bc.id = bce.bin_card_id
+         WHERE bc.store_id = s.id 
+           AND bc.item_id = $1
+         ORDER BY bce.created_at DESC, bce.id DESC
+         LIMIT 1
+        ), 0
+      ) AS available_qty
+    FROM stores s
+    LEFT JOIN item_locations il ON il.store_id = s.id AND il.item_id = $1
+    WHERE EXISTS (
+      SELECT 1 FROM bin_cards bc
+      WHERE bc.store_id = s.id AND bc.item_id = $1
+    )
+    ORDER BY available_qty DESC`,
+    [id]
+  );
+
+  const locations = availabilityResult.rows
+    .map(row => ({
+      storeId: row.store_id,
+      storeName: row.store_name,
+      bin: row.bin || 'UNASSIGNED',
+      availableQty: parseFloat(row.available_qty) || 0,
+      canTransferQty: parseFloat(row.available_qty) || 0
+    }))
+    .filter(loc => loc.availableQty > 0); // Only return stores with stock
+
+  const totalAvailable = locations.reduce((sum, loc) => sum + loc.availableQty, 0);
+
+  res.json({
+    itemId: item.id,
+    itemCode: item.code,
+    itemName: item.name,
+    unit: item.unit,
+    totalAvailable,
+    locations
+  });
+}
+
+module.exports = { list, create, getAvailability };

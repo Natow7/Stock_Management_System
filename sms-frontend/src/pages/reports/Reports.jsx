@@ -126,26 +126,6 @@ export default function Reports() {
         }
       />
 
-      <div className="mb-5 flex flex-wrap gap-2">
-        {REPORT_TABS.map((t) => (
-          <button
-            key={t.type}
-            onClick={() => {
-              setType(t.type);
-              setSearchParams({ type: t.type });
-            }}
-            className={`focus-ring inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-              type === t.type
-                ? "bg-navy-900 text-white shadow-sm"
-                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
-            }`}
-          >
-            {t.icon && <t.icon size={13} />}
-            {t.label}
-          </button>
-        ))}
-      </div>
-
       {loading && (
         <p className="text-xs text-slate-400 py-6 text-center">
           Generating report data…

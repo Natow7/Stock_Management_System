@@ -142,79 +142,79 @@ export default function SystemHealth() {
 
       {/* Entity Record Summary */}
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
-          <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl lg:col-span-2">
+          <div className="mb-4 flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
             <div className="flex items-center gap-2">
-              <Layers size={18} className="text-clay-600" />
-              <h2 className="text-sm font-semibold text-slate-800">
+              <Layers size={18} className="text-university-600 dark:text-university-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 Database Table Statistics & Entity Counts
               </h2>
             </div>
-            <span className="text-xs text-slate-400">PostgreSQL Schema v1.0</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">PostgreSQL Schema v1.0</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">User Accounts</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.users ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Preserved with audit trails</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">User Accounts</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.users ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Preserved with audit trails</p>
             </div>
 
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">Configured Stores</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.stores ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Main, Dept & Cafeteria</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Configured Stores</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.stores ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Main, Dept & Cafeteria</p>
             </div>
 
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">Master Items</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.items ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Consumables & Fixed Assets</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Master Items</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.items ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Consumables & Fixed Assets</p>
             </div>
 
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">Registered Suppliers</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.suppliers ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Active & Deactivated</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Registered Suppliers</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.suppliers ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Active & Deactivated</p>
             </div>
 
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">Goods Receipts</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.goodsReceipts ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Recorded shipments</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Goods Receipts</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.goodsReceipts ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Recorded shipments</p>
             </div>
 
-            <div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3.5">
-              <p className="text-xs text-slate-500 font-medium">Store Requisitions</p>
-              <p className="mt-1 text-xl font-bold text-navy-900">{health?.counts?.requisitions ?? 0}</p>
-              <p className="text-[10px] text-slate-400">Demand vouchers</p>
+            <div className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Store Requisitions</p>
+              <p className="mt-1 text-2xl font-extrabold text-university-800 dark:text-university-400">{health?.counts?.requisitions ?? 0}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-500">Demand vouchers</p>
             </div>
           </div>
         </div>
 
         {/* Trigger Backup Panel */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col justify-between">
+        <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl flex flex-col justify-between">
           <div>
-            <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-              <HardDriveDownload size={18} className="text-navy-700" />
-              <h2 className="text-sm font-semibold text-slate-800">
+            <div className="mb-4 flex items-center gap-2 border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+              <HardDriveDownload size={18} className="text-university-700 dark:text-university-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 On-Demand Data Backup
               </h2>
             </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed mb-4">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
               Triggering a backup extracts a consistent JSON snapshot of all system tables, configurations, and append-only audit ledgers, securely downloadable to local storage.
             </p>
 
             {lastBackup && (
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50/70 p-3 text-xs text-emerald-900 mb-4">
-                <p className="font-semibold flex items-center gap-1.5">
-                  <CheckCircle2 size={14} className="text-emerald-700" /> Backup Created & Downloaded
+              <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 p-3 text-xs text-emerald-900 dark:text-emerald-200 mb-4">
+                <p className="font-bold flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-emerald-700 dark:text-emerald-400" /> Backup Created & Downloaded
                 </p>
-                <p className="text-[11px] text-emerald-800 mt-1">
+                <p className="text-[11px] text-emerald-800 dark:text-emerald-300 mt-1">
                   ID: <strong>{lastBackup.backupId}</strong>
                 </p>
-                <p className="text-[10px] text-emerald-700">
+                <p className="text-[10px] text-emerald-700 dark:text-emerald-400">
                   {new Date(lastBackup.timestamp).toLocaleString()}
                 </p>
               </div>

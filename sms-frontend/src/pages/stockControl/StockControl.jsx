@@ -334,18 +334,18 @@ function ValuationTab() {
 
       {!loading && valuation && (
         <>
-          <div className="mb-4 grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs text-slate-400">Qty Remaining</p>
-              <p className="text-xl font-bold text-slate-800">{valuation.totalQtyRemaining}</p>
+          <div className="mb-4 grid grid-cols-3 gap-4">
+            <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-5 shadow-xl">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Qty Remaining</p>
+              <p className="text-2xl font-extrabold text-university-800 dark:text-university-400">{valuation.totalQtyRemaining}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs text-slate-400">Total FIFO Value</p>
-              <p className="text-xl font-bold text-slate-800">ETB {valuation.totalValue.toLocaleString()}</p>
+            <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-5 shadow-xl">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Total FIFO Value</p>
+              <p className="text-2xl font-extrabold text-university-800 dark:text-university-400">ETB {valuation.totalValue.toLocaleString()}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs text-slate-400">Average Unit Cost</p>
-              <p className="text-xl font-bold text-slate-800">ETB {valuation.averageUnitCost.toFixed(2)}</p>
+            <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-5 shadow-xl">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wide">Average Unit Cost</p>
+              <p className="text-2xl font-extrabold text-university-800 dark:text-university-400">ETB {valuation.averageUnitCost.toFixed(2)}</p>
             </div>
           </div>
           <DataTable

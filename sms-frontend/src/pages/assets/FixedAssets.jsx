@@ -364,22 +364,22 @@ export default function FixedAssets() {
           {userCards.map((uc) => (
             <div
               key={`${uc.custodianName}-${uc.department}`}
-              className="rounded-xl border border-slate-200 bg-white p-4"
+              className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xl"
             >
-              <p className="text-sm font-semibold text-slate-800">
+              <p className="text-sm font-bold text-slate-900 dark:text-white">
                 {uc.custodianName}
               </p>
-              <p className="mb-3 text-xs text-slate-400">{uc.department}</p>
+              <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">{uc.department}</p>
               <div className="space-y-2">
                 {uc.assets.map((a) => (
                   <div
                     key={a.id}
-                    className="flex items-center justify-between text-sm"
+                    className="flex items-center justify-between text-sm border-b border-slate-100 dark:border-slate-800 pb-2 last:border-0 last:pb-0"
                   >
-                    <span className="text-slate-600">
+                    <span className="text-slate-700 dark:text-slate-300 font-medium">
                       {items.find((i) => i.id === a.itemId)?.name || "—"}
                     </span>
-                    <span className="text-xs text-slate-400">{a.tag}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">{a.tag}</span>
                   </div>
                 ))}
               </div>

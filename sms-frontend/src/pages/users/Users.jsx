@@ -203,22 +203,22 @@ export default function Users() {
       </div>
 
       {showRoleInfo && (
-        <div className="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 text-sm font-semibold text-slate-900 flex items-center gap-2">
-            <ShieldAlert size={16} className="text-clay-600" />
+        <div className="mb-6 rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl">
+          <h3 className="mb-4 text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <ShieldAlert size={16} className="text-university-600 dark:text-university-400" />
             Institutional Role & Permission Dictionary
           </h3>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {ROLES.map((r) => (
               <div
                 key={r.name}
-                className="rounded-lg border border-slate-100 bg-slate-50/70 p-3"
+                className="rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 p-4"
               >
-                <div className="flex items-center justify-between">
-                  <p className="text-xs font-bold text-slate-800">{r.name}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">{r.name}</p>
                   <Badge tone="navy">{r.directorate}</Badge>
                 </div>
-                <p className="mt-1.5 text-[11px] leading-relaxed text-slate-600">
+                <p className="mt-1.5 text-[11px] leading-relaxed text-slate-600 dark:text-slate-400">
                   {r.scope}
                 </p>
               </div>

@@ -66,14 +66,14 @@ export default function SystemSettings() {
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Institutional Identity */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Building2 size={18} className="text-clay-600" />
+        <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl">
+          <div className="mb-4 flex items-center gap-2 border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+            <Building2 size={18} className="text-university-600 dark:text-university-400" />
             <div>
-              <h2 className="text-sm font-semibold text-slate-800">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 Institutional Identity & Directorate Profile
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Used in official stock reports, issue vouchers, GRNs, and system headers.
               </p>
             </div>
@@ -123,14 +123,14 @@ export default function SystemSettings() {
         </div>
 
         {/* Stock & Operational Controls */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Sliders size={18} className="text-clay-600" />
+        <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl">
+          <div className="mb-4 flex items-center gap-2 border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+            <Sliders size={18} className="text-university-600 dark:text-university-400" />
             <div>
-              <h2 className="text-sm font-semibold text-slate-800">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 Stock Governance & Delegation Policies
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Rules governing stock thresholds and procurement delegation.
               </p>
             </div>
@@ -170,14 +170,14 @@ export default function SystemSettings() {
         </div>
 
         {/* Technical, Security & Backup Policies */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Lock size={18} className="text-clay-600" />
+        <div className="rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl">
+          <div className="mb-4 flex items-center gap-2 border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+            <Lock size={18} className="text-university-600 dark:text-university-400" />
             <div>
-              <h2 className="text-sm font-semibold text-slate-800">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 Security, Audit Retention & Data Backups
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Technical parameters for compliance, retention, and maintenance.
               </p>
             </div>

@@ -9,43 +9,20 @@ export default function DashboardRoleHeader({
   department,
   actions,
 }) {
-  const displayName = user?.name || "Admin User";
-  const displayRole = roleTitle || user?.role || "System Administrator";
-  const displayDept = department || user?.department || "";
-
-  const initials = displayName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
-    <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200/80 pb-4 sm:flex-row sm:items-center">
-      <div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+    <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end border-b-2 border-slate-200 dark:border-slate-800 pb-6">
+      <div className="flex-1">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl mb-2 font-heading bg-gradient-to-r from-university-700 to-university-900 dark:from-university-400 dark:to-university-600 bg-clip-text text-transparent">
           {title}
         </h1>
-        <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{subtitle}</p>
       </div>
 
-      <div className="flex items-center gap-3">
-        {actions && <div className="mr-2 flex items-center gap-2">{actions}</div>}
-
-        <div className="flex items-center gap-3 rounded-xl border border-slate-200/70 bg-white px-3.5 py-1.5 shadow-sm">
-          <div className="text-right">
-            <p className="text-xs font-bold leading-tight text-slate-800">
-              {displayName}
-            </p>
-            <p className="text-[10px] font-medium leading-tight text-slate-400">
-              {displayDept ? `${displayRole} • ${displayDept}` : displayRole}
-            </p>
-          </div>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 font-bold text-xs text-white ring-2 ring-slate-100">
-            {initials || <User size={14} />}
-          </div>
+      {actions && (
+        <div className="flex items-center gap-3">
+          {actions}
         </div>
-      </div>
+      )}
     </div>
   );
 }

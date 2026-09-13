@@ -12,8 +12,8 @@ export default function DonutChart({
   ],
   className = "",
 }) {
-  const size = 160;
-  const strokeWidth = 18;
+  const size = 260;
+  const strokeWidth = 28;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
@@ -32,25 +32,28 @@ export default function DonutChart({
 
   return (
     <div
-      className={`flex flex-col justify-between rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm ${className}`}
+      className={`group flex flex-col justify-between h-full rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 p-6 shadow-xl hover:shadow-2xl transition-all duration-300 ${className}`}
     >
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-800">{title}</h3>
-        <span className="text-[11px] font-medium text-slate-400">Live Breakdown</span>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-white">{title}</h3>
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">Live Data</span>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
+      <div className="flex flex-col sm:flex-row items-center justify-around gap-12 flex-1 py-8">
         {/* SVG Donut Circle */}
         <div className="relative flex items-center justify-center">
           <svg width={size} height={size} className="-rotate-90 transform">
+            {/* Background circle */}
             <circle
               cx={size / 2}
               cy={size / 2}
               r={radius}
               fill="transparent"
-              stroke="#f1f5f9"
+              stroke="currentColor"
+              className="text-slate-200 dark:text-slate-700"
               strokeWidth={strokeWidth}
             />
+            {/* Animated segments */}
             {renderedSegments.map((seg, idx) => (
               <circle
                 key={idx}
@@ -63,43 +66,53 @@ export default function DonutChart({
                 strokeDasharray={seg.strokeDasharray}
                 strokeDashoffset={seg.strokeDashoffset}
                 strokeLinecap="round"
-                className="transition-all duration-500"
+                style={{
+                  opacity: 0,
+                  animation: `segmentAppear 0.8s ease-out ${idx * 150 + 300}ms forwards`
+                }}
               />
             ))}
           </svg>
 
-          {/* Central Counter */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+          {/* Central Counter with animation */}
+          <div 
+            className="absolute inset-0 flex flex-col items-center justify-center text-center"
+            style={{ opacity: 0, animation: 'fadeIn 0.6s ease-out 1200ms forwards' }}
+          >
+            <span className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white font-heading">
               {typeof total === "number" ? total.toLocaleString() : total}
             </span>
-            <span className="text-[10px] font-medium text-slate-400">
+            <span className="text-base font-semibold text-slate-500 dark:text-slate-400 mt-2">
               {totalLabel}
             </span>
           </div>
         </div>
 
-        {/* Legend Breakdown */}
-        <div className="w-full max-w-[200px] space-y-2.5">
+        {/* Legend Breakdown with animation */}
+        <div className="w-full max-w-[240px] space-y-5">
           {segments.map((seg, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between text-xs text-slate-700"
+              className="flex items-center justify-between text-base text-slate-700 dark:text-slate-300"
+              style={{
+                opacity: 0,
+                animation: `fadeIn 0.4s ease-out ${1800 + idx * 100}ms forwards`
+              }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
+                  className="h-4 w-4 shrink-0 rounded-full shadow-sm"
                   style={{ backgroundColor: seg.color }}
                 />
-                <span className="font-medium text-slate-600 truncate">
+                <span className="font-semibold text-slate-700 dark:text-slate-300 truncate">
                   {seg.label}
                 </span>
               </div>
               <div className="text-right">
-                <span className="font-bold text-slate-800">
+                <span className="font-bold text-slate-900 dark:text-white">
                   {seg.count?.toLocaleString() ?? 0}
                 </span>{" "}
-                <span className="text-[10px] text-slate-400">
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
                   ({seg.percentage}%)
                 </span>
               </div>
@@ -107,6 +120,22 @@ export default function DonutChart({
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes segmentAppear {
+          from { 
+            opacity: 0;
+            stroke-dasharray: 0 ${circumference};
+          }
+          to { 
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 }

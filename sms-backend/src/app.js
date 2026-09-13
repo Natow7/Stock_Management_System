@@ -26,6 +26,7 @@ const reportsRoutes = require("./routes/reports.routes");
 const auditLogsRoutes = require("./routes/auditLogs.routes");
 const systemRoutes = require("./routes/system.routes");
 const notificationsRoutes = require("./routes/notifications.routes");
+const gateClearanceRoutes = require("./routes/gateClearance.routes");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -97,6 +98,7 @@ app.get("/", (req, res) =>
       auditLogs: "/api/audit-logs",
       system: "/api/system",
       notifications: "/api/notifications",
+      gateClearance: "/api/gate-clearance-requests",
     },
   }),
 );
@@ -152,6 +154,7 @@ app.use("/api/reports", reportsRoutes);
 app.use("/api/audit-logs", auditLogsRoutes);
 app.use("/api/system", systemRoutes);
 app.use("/api/notifications", notificationsRoutes);
+app.use("/api/gate-clearance-requests", gateClearanceRoutes);
 
 app.use((req, res) =>
   res

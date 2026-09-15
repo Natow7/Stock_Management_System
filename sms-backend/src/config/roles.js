@@ -15,6 +15,7 @@ const ROLES = [
   "Accountant",
   "Disposal Committee",
   "Campus Security Officer",
+  "Gate Security Guard",
 ];
 
 // Roles that may perform first-line store operations (receipts, bin

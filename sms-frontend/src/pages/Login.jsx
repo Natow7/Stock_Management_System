@@ -6,134 +6,132 @@ import {
   LogIn,
   Eye,
   EyeOff,
-  Sparkles,
-  ShieldCheck,
-  ShieldAlert,
-  Search,
-  X,
-  ArrowRight,
-  UserCheck,
+  CheckCircle,
+  AlertCircle,
+  Shield,
+  BookOpen,
+  Users,
   Building2,
-  Boxes,
-  FileCheck2,
-  Layers,
-  HelpCircle,
+  Sparkles,
+  X,
+  Search,
+  ArrowRight,
 } from "lucide-react";
 import { useApp } from "../context/AppContext.jsx";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-// Structured Demo Accounts categorized by institutional governance domain
-const DEMO_ACTORS = [
+// Demo accounts organized by institutional governance domain - Complete role set
+const DEMO_ACCOUNTS = [
   {
     category: "Governance & Property Oversight",
     icon: Building2,
-    actors: [
+    accounts: [
       {
         name: "Abel Tesfaye",
         email: "abel.admin@university.edu",
         role: "Administrator",
-        color: "bg-purple-100 text-purple-800 border-purple-200",
-        avatarBg: "bg-purple-600 text-white",
-        desc: "System configuration, user accounts, and immutable audit logs.",
         initials: "AT",
+        color: "bg-purple-600",
+        description: "System configuration, user accounts, and immutable audit logs.",
       },
       {
         name: "Meron Alemu",
         email: "meron.pao@university.edu",
         role: "Property Administration Officer",
-        color: "bg-blue-100 text-blue-800 border-blue-200",
-        avatarBg: "bg-blue-600 text-white",
-        desc: "Senior approval gate for store requisitions, SIVs, returns & transfers.",
         initials: "MA",
+        color: "bg-blue-600",
+        description: "Senior approval gate for store requisitions, SIVs, returns & transfers.",
       },
       {
         name: "Dr. Tewodros Fikru",
         email: "tewodros.dept@university.edu",
         role: "Department Head",
-        color: "bg-indigo-100 text-indigo-800 border-indigo-200",
-        avatarBg: "bg-indigo-600 text-white",
-        desc: "Departmental requisitions, staff request approvals & unit custody.",
         initials: "TF",
+        color: "bg-indigo-600",
+        description: "Departmental requisitions, staff request approvals & unit custody.",
       },
     ],
   },
   {
-    name: "Store & Warehouse Operations",
-    icon: Boxes,
-    actors: [
+    category: "Store & Warehouse Operations",
+    icon: Building2,
+    accounts: [
       {
         name: "Dawit Bekele",
         email: "dawit.store@university.edu",
         role: "Store Head",
-        color: "bg-emerald-100 text-emerald-800 border-emerald-200",
-        avatarBg: "bg-emerald-600 text-white",
-        desc: "Delivery receipt, Model 20 SIV creation, Model 22 issuing & FIFO deduction.",
         initials: "DB",
+        color: "bg-emerald-600",
+        description: "Delivery receipt, Model 20 SIV creation, Model 22 issuing & FIFO deduction.",
       },
       {
         name: "Sara Getachew",
         email: "sara.clerk@university.edu",
         role: "Stock Clerk",
-        color: "bg-teal-100 text-teal-800 border-teal-200",
-        avatarBg: "bg-teal-600 text-white",
-        desc: "Delivery logging, storage bin/shelf allocation, and physical count lines.",
         initials: "SG",
+        color: "bg-teal-600",
+        description: "Delivery logging, storage bin/shelf allocation, and physical count lines.",
       },
     ],
   },
   {
     category: "Inspection & Registration",
-    icon: FileCheck2,
-    actors: [
+    icon: Shield,
+    accounts: [
       {
         name: "Eng. Yonas Kebede",
         email: "yonas.tec@university.edu",
         role: "Technical Evaluation Committee",
-        color: "bg-amber-100 text-amber-800 border-amber-200",
-        avatarBg: "bg-amber-600 text-white",
-        desc: "Specification inspection for goods receipts and return condition grading.",
         initials: "YK",
+        color: "bg-amber-600",
+        description: "Specification inspection for goods receipts and return condition grading.",
       },
       {
         name: "Hana Girma",
         email: "hana.registration@university.edu",
         role: "Property Registration Officer",
-        color: "bg-cyan-100 text-cyan-800 border-cyan-200",
-        avatarBg: "bg-cyan-600 text-white",
-        desc: "Official Model 19 (GRN) issuance, asset tagging & User-Card registers.",
         initials: "HG",
+        color: "bg-cyan-600",
+        description: "Official Model 19 (GRN) issuance, asset tagging & User-Card registers.",
       },
     ],
   },
   {
     category: "Finance, Governance & Security",
-    icon: Layers,
-    actors: [
+    icon: Users,
+    accounts: [
       {
         name: "Selam Mulu",
         email: "selam.acct@university.edu",
         role: "Accountant",
-        color: "bg-rose-100 text-rose-800 border-rose-200",
-        avatarBg: "bg-rose-600 text-white",
-        desc: "Perpetual FIFO inventory valuation, write-offs & reconciliation.",
         initials: "SM",
+        color: "bg-rose-600",
+        description: "Perpetual FIFO inventory valuation, write-offs & reconciliation.",
       },
       {
         name: "Disposal Board",
         email: "disposal.committee@university.edu",
         role: "Disposal Committee",
-        color: "bg-red-100 text-red-800 border-red-200",
-        avatarBg: "bg-red-600 text-white",
-        desc: "Sole authority to approve retirement via Auction, Destruction, or Donation.",
         initials: "DC",
+        color: "bg-red-600",
+        description: "Sole authority to approve retirement via Auction, Destruction, or Donation.",
       },
       {
         name: "Girum Assefa",
         email: "girum.security@university.edu",
         role: "Campus Security Officer",
-        color: "bg-orange-100 text-orange-800 border-orange-200",
-        avatarBg: "bg-orange-600 text-white",
-        desc: "Gate pass verification & exit clearance against finalized Model 22.",
         initials: "GA",
+        color: "bg-orange-600",
+        description: "Pre-approval of gate clearance requests before materials leave campus.",
+      },
+      {
+        name: "Abebe Bekele",
+        email: "abebe.gate@university.edu",
+        role: "Gate Security Guard",
+        initials: "AB",
+        color: "bg-orange-700",
+        description: "Physical gate verification and exit logging when materials leave campus.",
       },
     ],
   },
@@ -149,377 +147,462 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showDemoModal, setShowDemoModal] = useState(false);
-  const [showForgotModal, setShowForgotModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   async function handleLogin(e) {
     if (e) e.preventDefault();
+    
     if (!email || !password) {
-      setError("Please enter your username and password.");
+      setError("Please enter your email and password.");
       return;
     }
+
     setError("");
     setLoading(true);
+
     try {
       await login(email, password);
       navigate("/");
     } catch (err) {
-      setError(err.message || "Invalid username or password.");
+      setError(err.message || "Invalid email or password. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleDirectActorLogin(actorEmail) {
-    setEmail(actorEmail);
-    setPassword("Demo@1234");
+  async function handleDemoLogin(demoEmail) {
+    setEmail(demoEmail);
+    setPassword("passwd");
+    setShowDemoModal(false);
     setError("");
     setLoading(true);
-    setShowDemoModal(false);
+
     try {
-      await login(actorEmail, "Demo@1234");
+      await login(demoEmail, "passwd");
       navigate("/");
     } catch (err) {
-      setError(err.message || "Login failed.");
+      setError(err.message || "Demo login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
-  function handleSelectActor(actorEmail) {
-    setEmail(actorEmail);
-    setPassword("Demo@1234");
-    setError("");
+  function fillDemoCredentials(demoEmail) {
+    setEmail(demoEmail);
+    setPassword("passwd");
     setShowDemoModal(false);
+    setError("");
   }
 
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#f0f2f5] px-4 py-8 font-sans selection:bg-[#007bff] selection:text-white">
-      {/* Top Branding */}
-      <div className="mb-6 flex flex-col items-center text-center">
-        {/* SPMS Modern Hexagonal Logo */}
-        <div className="relative mb-3 flex items-center justify-center">
-          <img
-            src="/spms-logo.svg"
-            alt="Stock Management System Logo"
-            className="h-28 w-28 object-contain drop-shadow-sm transition-transform hover:scale-105 duration-200"
-          />
-        </div>
+  const filteredAccounts = DEMO_ACCOUNTS.map(category => ({
+    ...category,
+    accounts: category.accounts.filter(acc =>
+      acc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      acc.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      acc.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  })).filter(category => category.accounts.length > 0);
 
-        {/* Portal Title */}
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#343a40] tracking-tight">
-          Stock Management System
-        </h1>
+  return (
+    <div className="grid min-h-screen lg:grid-cols-2">
+      {/* Left Side: University Branding */}
+      <div className="relative hidden lg:flex lg:flex-col lg:justify-center bg-gradient-to-br from-university-600 via-university-700 to-university-900 p-12 text-white overflow-hidden">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-10 animate-pulse-slow" />
+        <div className="absolute top-20 right-20 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
+        <div className="absolute bottom-20 left-20 h-80 w-80 rounded-full bg-university-400/10 blur-3xl" />
+        
+        <div className="relative z-10 max-w-lg">
+          {/* University Logo */}
+          <div className="mb-8 flex items-center gap-4 animate-fade-in">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 border-2 border-white/30 shadow-2xl backdrop-blur-sm">
+              <Building2 className="h-9 w-9 text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-university-200 tracking-wider uppercase">University</p>
+              <h1 className="text-2xl font-bold tracking-tight">Stock & Property Management</h1>
+            </div>
+          </div>
+
+          {/* System Title */}
+          <h2 className="mb-4 text-4xl font-bold leading-tight animate-fade-in-delay-1">
+            Institutional Inventory Control System
+          </h2>
+          <p className="mb-12 text-lg text-university-100 leading-relaxed animate-fade-in-delay-2">
+            Complete material lifecycle tracking with full document compliance
+            and segregation of duties enforcement.
+          </p>
+
+          {/* Features List */}
+          <div className="space-y-4 animate-fade-in-delay-3">
+            <div className="flex items-start gap-3 group">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-success-500/30 border border-success-400/30 group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-5 w-5 text-success-300" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Complete Lifecycle Tracking</h3>
+                <p className="text-sm text-university-200">
+                  From procurement to disposal with full audit trail
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-success-500/30 border border-success-400/30 group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-5 w-5 text-success-300" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Model Document Compliance</h3>
+                <p className="text-sm text-university-200">
+                  Official forms and documents for institutional tracking
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 group">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-success-500/30 border border-success-400/30 group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-5 w-5 text-success-300" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Segregation of Duties</h3>
+                <p className="text-sm text-university-200">
+                  Role-based access with approval workflows and audit compliance
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer Badge */}
+          <div className="mt-12 inline-flex items-center gap-2 rounded-full bg-white/20 border-2 border-white/30 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm shadow-lg animate-fade-in-delay-4">
+            <Shield className="h-4 w-4 text-success-300" />
+            <span>Secure • Compliant • Auditable</span>
+          </div>
+        </div>
       </div>
 
-      {/* Main Authentication Card */}
-      <div className="relative w-full max-w-[460px] rounded-md border border-slate-200/80 bg-white p-7 sm:p-9 shadow-md shadow-slate-300/30">
-        {/* Sub-Heading inside Card */}
-        <p className="mb-6 text-center text-sm sm:text-base font-normal text-[#495057]">
-          For Authorized Staff Only
-        </p>
-
-        {/* Error Alert */}
-        {error && (
-          <div className="mb-4 flex items-center gap-2 rounded border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700">
-            <ShieldAlert size={16} className="shrink-0 text-rose-600" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          {/* Username / Institutional Email Field */}
-          <div className="relative">
-            <input
-              type="email"
-              required
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Username"
-              className="w-full rounded border border-slate-300 bg-white py-2.5 pl-3.5 pr-10 text-sm text-slate-800 placeholder-slate-400 transition-colors focus:border-[#007bff] focus:outline-none focus:ring-1 focus:ring-[#007bff]"
-            />
-            <Mail
-              size={18}
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
-            />
+      {/* Right Side: Login Form */}
+      <div className="flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-6 sm:p-8">
+        <div className="w-full max-w-md space-y-8">
+          {/* Mobile Logo */}
+          <div className="flex items-center justify-center gap-3 lg:hidden animate-fade-in">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-university-600 text-white shadow-xl">
+              <Building2 className="h-8 w-8" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">SPMS</h1>
+              <p className="text-sm text-muted-foreground">Stock Management</p>
+            </div>
           </div>
 
-          {/* Password Field */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full rounded border border-slate-300 bg-white py-2.5 pl-3.5 pr-10 text-sm text-slate-800 placeholder-slate-400 transition-colors focus:border-[#007bff] focus:outline-none focus:ring-1 focus:ring-[#007bff]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((s) => !s)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors p-0.5"
-              tabIndex={-1}
-              title={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Lock size={18} />}
-            </button>
+          {/* Welcome Card */}
+          <div className="space-y-3 text-center lg:text-left animate-fade-in-delay-1">
+            <h2 className="text-4xl font-bold text-foreground tracking-tight">Welcome Back</h2>
+            <p className="text-base text-muted-foreground">
+              Sign in to access the Stock Management System
+            </p>
           </div>
 
-          {/* Sign In Button */}
-          <div className="pt-2">
-            <button
+          {/* Error Alert */}
+          {error && (
+            <div className="flex items-start gap-3 rounded-xl border-2 border-danger-300 bg-danger-50 p-4 dark:border-danger-800 dark:bg-danger-950/50 shadow-lg animate-shake">
+              <AlertCircle className="h-5 w-5 shrink-0 text-danger-600 dark:text-danger-400" />
+              <p className="text-sm font-medium text-danger-700 dark:text-danger-300">{error}</p>
+            </div>
+          )}
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-5">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label 
+                htmlFor="email" 
+                className="text-sm font-semibold text-foreground"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@university.edu"
+                  className={cn(
+                    "w-full rounded-xl border-2 border-input bg-background px-4 py-3 pl-11 shadow-sm",
+                    "text-sm font-medium text-foreground placeholder:text-muted-foreground",
+                    "focus:border-university-500 focus:outline-none focus:ring-4 focus:ring-university-500/10",
+                    "transition-all duration-200"
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label 
+                htmlFor="password" 
+                className="text-sm font-semibold text-foreground"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className={cn(
+                    "w-full rounded-xl border-2 border-input bg-background px-4 py-3 pl-11 pr-11 shadow-sm",
+                    "text-sm font-medium text-foreground placeholder:text-muted-foreground",
+                    "focus:border-university-500 focus:outline-none focus:ring-4 focus:ring-university-500/10",
+                    "transition-all duration-200"
+                  )}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors rounded-lg p-1 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2.5 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-2 border-input text-university-600 focus:ring-2 focus:ring-university-500/20 cursor-pointer"
+                />
+                <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
+              </label>
+              <button
+                type="button"
+                className="text-sm font-semibold text-university-600 hover:text-university-700 dark:text-university-400 dark:hover:text-university-300 transition-colors hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            {/* Sign In Button */}
+            <Button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center gap-2 rounded bg-[#007bff] hover:bg-[#0069d9] active:bg-[#0062cc] px-6 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 disabled:opacity-60"
+              className={cn(
+                "w-full bg-university-600 hover:bg-university-700 shadow-lg shadow-university-600/20",
+                "text-white font-bold text-base h-12",
+                "hover:shadow-xl hover:shadow-university-600/30 hover:-translate-y-0.5",
+                "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
+                "transition-all duration-200"
+              )}
             >
               {loading ? (
                 <>
-                  <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   <span>Signing in...</span>
                 </>
               ) : (
                 <>
-                  <LogIn size={16} />
-                  <span>Sign in</span>
+                  <LogIn className="h-5 w-5" />
+                  <span>Sign In</span>
                 </>
               )}
-            </button>
+            </Button>
+          </form>
+
+          {/* Demo Accounts Button */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or
+              </span>
+            </div>
           </div>
 
-          {/* Bottom Row: Forgot Password & Demo Data Button */}
-          <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-6">
-            <button
-              type="button"
-              onClick={() => setShowForgotModal(true)}
-              className="text-sm font-normal text-[#007bff] hover:underline"
-            >
-              Forgot Password ?
-            </button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowDemoModal(true)}
+            className="w-full border-2 border-university-200 text-university-700 hover:bg-university-50 hover:border-university-300 dark:border-university-800 dark:text-university-300 dark:hover:bg-university-950 dark:hover:border-university-700 font-semibold transition-all"
+            size="lg"
+          >
+            <span>Explore Demo Accounts</span>
+          </Button>
 
-            <button
-              type="button"
-              onClick={() => setShowDemoModal(true)}
-              className="inline-flex items-center gap-1.5 rounded bg-[#17a2b8] hover:bg-[#138496] active:bg-[#117a8b] px-4 py-1.5 text-sm font-medium text-white shadow-sm transition-all duration-150"
-            >
-              <Sparkles size={14} className="text-amber-200" />
-              <span>Demo data</span>
-            </button>
-          </div>
-        </form>
+          {/* Footer Note */}
+          <p className="text-center text-xs text-muted-foreground">
+            Authorized personnel only. All activities are logged and monitored.
+          </p>
+        </div>
       </div>
 
-      {/* Footer Info */}
-      
-
-      {/* ========================================================================= */}
-      {/* PRETTY DEMO DATA MODAL                                                    */}
-      {/* ========================================================================= */}
+      {/* Demo Accounts Modal - Modern Solid Design */}
       {showDemoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="relative flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white shadow-2xl overflow-hidden border border-slate-200">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-200 bg-[#f8f9fa] px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#17a2b8] text-white shadow-sm">
-                  <Sparkles size={20} />
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-slate-800">
-                    SPMS Demo Accounts Directory
-                  </h2>
-                  <p className="text-xs text-slate-500">
-                    Select any institutional actor to test their dedicated
-                    workflow permissions
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 animate-fade-in">
+          <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-background shadow-2xl overflow-hidden">
+            {/* Modal Header - Solid Design with Gradient Accent */}
+            <div className="relative bg-gradient-to-r from-university-600 to-university-700 px-6 py-6 text-white">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-1">Demo Accounts</h3>
+                  <p className="text-sm text-university-100">
+                    Select any role to explore the system • Password: <span className="font-mono font-semibold">passwd</span>
                   </p>
                 </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowDemoModal(false)}
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Modal Search & Credential Notice */}
-            <div className="border-b border-slate-100 bg-blue-50/60 px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-blue-900 font-medium">
-                <ShieldCheck size={16} className="text-blue-600" />
-                <span>
-                  All accounts standard password:{" "}
-                  <code className="rounded bg-white px-2 py-0.5 font-mono font-bold text-blue-700 border border-blue-200">
-                    Demo@1234
-                  </code>
-                </span>
+                <button
+                  onClick={() => setShowDemoModal(false)}
+                  className="rounded-lg p-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+                  aria-label="Close demo accounts modal"
+                >
+                  <X className="h-6 w-6" />
+                </button>
               </div>
 
-              {/* Quick Search Input */}
-              <div className="relative min-w-[220px]">
+              {/* Search Bar - Integrated into header */}
+              <div className="relative mt-4">
+                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-university-300" />
                 <input
                   type="text"
-                  placeholder="Search role or name..."
+                  placeholder="Search accounts by name, email, or role..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 bg-white py-1.5 pl-8 pr-3 text-xs text-slate-800 placeholder-slate-400 focus:border-[#007bff] focus:outline-none"
-                />
-                <Search
-                  size={14}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 pl-11 text-sm text-white placeholder:text-university-200 focus:bg-white/15 focus:border-white/30 focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
-            {/* Modal Body: Actors Grid */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-              {DEMO_ACTORS.map((group) => {
-                const filteredActors = group.actors.filter(
-                  (a) =>
-                    a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    a.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    a.email.toLowerCase().includes(searchQuery.toLowerCase()),
-                );
-
-                if (filteredActors.length === 0) return null;
-
-                return (
-                  <div key={group.category || group.name} className="space-y-3">
-                    <div className="flex items-center gap-2 border-b border-slate-100 pb-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">
-                      {group.icon && (
-                        <group.icon size={15} className="text-[#17a2b8]" />
-                      )}
-                      <span>{group.category || group.name}</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {filteredActors.map((actor) => (
-                        <div
-                          key={actor.email}
-                          className="group relative flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-3.5 shadow-sm transition-all hover:border-[#17a2b8] hover:shadow-md"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div
-                              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold text-xs shadow-sm ${actor.avatarBg}`}
-                            >
-                              {actor.initials}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <h3 className="text-xs font-bold text-slate-800 truncate">
-                                  {actor.name}
-                                </h3>
-                                <span
-                                  className={`rounded-full px-2 py-0.2 text-[10px] font-semibold border ${actor.color}`}
-                                >
-                                  {actor.role}
-                                </span>
-                              </div>
-                              <p className="text-[11px] font-mono text-slate-500 truncate mt-0.5">
-                                {actor.email}
-                              </p>
-                              <p className="text-[11px] text-slate-600 leading-snug mt-1 line-clamp-2">
-                                {actor.desc}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-end gap-2">
-                            <button
-                              type="button"
-                              onClick={() => handleSelectActor(actor.email)}
-                              className="rounded px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-colors"
-                            >
-                              Fill Form
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleDirectActorLogin(actor.email)
-                              }
-                              className="inline-flex items-center gap-1 rounded bg-[#007bff] hover:bg-[#0069d9] px-3 py-1 text-xs font-semibold text-white shadow-sm transition-colors"
-                            >
-                              <span>Sign in</span>
-                              <ArrowRight size={12} />
-                            </button>
-                          </div>
+            {/* Accounts List - Clean Solid Cards */}
+            <div className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950">
+              {filteredAccounts.length > 0 ? (
+                <div className="p-6 space-y-6">
+                  {filteredAccounts.map((category) => (
+                    <div key={category.category}>
+                      {/* Category Header */}
+                      <div className="flex items-center gap-2 mb-4 px-1">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-university-100 dark:bg-university-900/30">
+                          <category.icon className="h-4 w-4 text-university-600 dark:text-university-400" />
                         </div>
-                      ))}
+                        <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
+                          {category.category}
+                        </h4>
+                        <div className="flex-1 h-px bg-border" />
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {category.accounts.length} {category.accounts.length === 1 ? 'account' : 'accounts'}
+                        </span>
+                      </div>
+
+                      {/* Account Cards Grid */}
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        {category.accounts.map((account) => (
+                          <div
+                            key={account.email}
+                            className="group relative flex flex-col bg-white dark:bg-slate-900 rounded-xl border-2 border-slate-200 dark:border-slate-800 p-5 transition-all hover:border-university-500 hover:shadow-xl hover:-translate-y-1"
+                          >
+                            {/* Account Header */}
+                            <div className="flex items-start gap-4 mb-4">
+                              <div
+                                className={cn(
+                                  "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white font-bold text-lg shadow-lg ring-4 ring-white dark:ring-slate-900",
+                                  account.color
+                                )}
+                              >
+                                {account.initials}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <h5 className="font-bold text-foreground text-base leading-tight mb-1">
+                                  {account.name}
+                                </h5>
+                                <p className="text-xs font-semibold text-university-600 dark:text-university-400 mb-1">
+                                  {account.role}
+                                </p>
+                                <p className="text-xs font-mono text-muted-foreground truncate bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                                  {account.email}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
+                              {account.description}
+                            </p>
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => fillDemoCredentials(account.email)}
+                                className="flex-1 h-9 text-xs font-semibold border-2"
+                              >
+                                Fill Form
+                              </Button>
+                              <Button
+                                size="sm"
+                                onClick={() => handleDemoLogin(account.email)}
+                                className="flex-1 h-9 bg-university-600 hover:bg-university-700 text-white text-xs font-semibold shadow-lg shadow-university-600/20"
+                              >
+                                <span>Sign In</span>
+                                <ArrowRight className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            {/* Hover Accent */}
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-university-500 to-university-600 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-200 dark:bg-slate-800 mb-4">
+                    <Search className="h-8 w-8 text-muted-foreground" />
                   </div>
-                );
-              })}
+                  <p className="text-base font-semibold text-foreground mb-1">No accounts found</p>
+                  <p className="text-sm text-muted-foreground">
+                    Try adjusting your search query
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* Modal Footer */}
-            <div className="border-t border-slate-200 bg-[#f8f9fa] px-6 py-3 flex items-center justify-between text-xs text-slate-500">
-              <span>10 institutional roles configured for ASTU SPMS</span>
-              <button
-                type="button"
-                onClick={() => setShowDemoModal(false)}
-                className="rounded bg-slate-200 hover:bg-slate-300 px-4 py-1.5 text-xs font-semibold text-slate-700 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* FORGOT PASSWORD MODAL                                                     */}
-      {/* ========================================================================= */}
-      {showForgotModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-slate-800 font-bold text-base">
-                <HelpCircle size={20} className="text-[#007bff]" />
-                <span>Password Recovery Assistance</span>
+            {/* Modal Footer - Clean Stats Bar */}
+            <div className="border-t-2 border-border bg-white dark:bg-slate-900 px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-university-100 dark:bg-university-900/30">
+                    <Users className="h-4 w-4 text-university-600 dark:text-university-400" />
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">
+                    {filteredAccounts.reduce((acc, cat) => acc + cat.accounts.length, 0)} accounts available
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowDemoModal(false)}
+                  className="border-2 font-semibold"
+                >
+                  Close
+                </Button>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(false)}
-                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs leading-relaxed text-slate-600">
-              <p>
-                In the official university environment, password resets are
-                governed by the{" "}
-                <strong>ICT Directorate &amp; System Administrator</strong>.
-              </p>
-              <div className="rounded-xl bg-blue-50 p-3.5 border border-blue-200 text-blue-900">
-                <span className="font-bold block mb-1">
-                  Standard Demonstration Credentials:
-                </span>
-                <p className="text-xs">
-                  Password for all seeded accounts is:{" "}
-                  <code className="rounded bg-white px-2 py-0.5 font-mono font-bold text-blue-700 border border-blue-300">
-                    Demo@1234
-                  </code>
-                </p>
-              </div>
-              <p>
-                You can use the <strong>"Demo data"</strong> button in the
-                bottom right corner of the login card to immediately preview and
-                log into any of the 10 authorized actor accounts.
-              </p>
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(false)}
-                className="w-full rounded-lg bg-[#007bff] hover:bg-[#0069d9] py-2 text-xs font-semibold text-white transition-colors"
-              >
-                Got It
-              </button>
             </div>
           </div>
         </div>

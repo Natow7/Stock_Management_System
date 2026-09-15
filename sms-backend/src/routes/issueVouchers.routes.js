@@ -21,7 +21,7 @@ router.get(
 );
 router.post(
   "/:id/gate-clearance",
-  requireRole("Campus Security Officer"),
+  requireRole("Campus Security Officer", "Gate Security Guard"),
   asyncHandler(ctrl.recordGateClearance),
 );
 router.post(
@@ -31,7 +31,7 @@ router.post(
 );
 router.post(
   "/:id/amend",
-  requireRole("Property Administration Officer", "Department Head"),
+  requireRole("Store Head", "Property Administration Officer", "Department Head"),
   asyncHandler(ctrl.amend),
 );
 router.post(

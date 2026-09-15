@@ -180,9 +180,11 @@ export function AppProvider({ children }) {
       refreshKeys: ["goodsReceipts", "auditLogs"],
     });
 
-  const evaluateGoodsReceipt = (id, decision, remarks) =>
-    runAction(() => api.goodsReceipts.evaluate(id, { decision, remarks }), {
-      successMessage: `Evaluation recorded: ${decision}.`,
+  const evaluateGoodsReceipt = (id, decision, remarks, itemDecisions) =>
+    runAction(() => api.goodsReceipts.evaluate(id, { decision, remarks, itemDecisions }), {
+      successMessage: itemDecisions 
+        ? `Multi-item evaluation recorded.`
+        : `Evaluation recorded: ${decision}.`,
       refreshKeys: ["goodsReceipts", "auditLogs"],
     });
 
@@ -208,6 +210,33 @@ export function AppProvider({ children }) {
       },
     );
 
+  // ---- NEW: Delegation workflow actions ----
+  const approveForGRN = (id, payload) =>
+    runAction(() => api.goodsReceipts.approveForGrn(id, payload), {
+      successMessage: "Approved for GRN generation. Stock Clerk notified.",
+      refreshKeys: ["goodsReceipts", "auditLogs"],
+    });
+
+  const executeGRN = (id, payload) =>
+    runAction(() => api.goodsReceipts.executeGrn(id, payload), {
+      successMessage: "GRN generated successfully. Stock updated. Awaiting Store Head verification.",
+      refreshKeys: [
+        "goodsReceipts",
+        "items",
+        "binCards",
+        "itemLocations",
+        "reorderAlerts",
+        "auditLogs",
+      ],
+    });
+
+  const verifyPhysicalStock = (id, payload) =>
+    runAction(() => api.goodsReceipts.verifyPhysicalStock(id, payload), {
+      successMessage: "Physical stock verified. GRN workflow complete.",
+      refreshKeys: ["goodsReceipts", "auditLogs"],
+    });
+
+
   // ---- Requisition / Issuing workflow ----
   const addRequisition = (payload) =>
     runAction(() => api.requisitions.create(payload), {
@@ -215,17 +244,18 @@ export function AppProvider({ children }) {
       refreshKeys: ["requisitions", "auditLogs"],
     });
 
-  const decideRequisition = (id, decision) =>
+  const decideRequisition = (id, decision, confirmationPassword = null) =>
     runAction(
       () => {
         if (currentUser?.role === "Department Head") {
           return api.requisitions.decide(id, decision);
         }
-        const confirmationPassword = window.prompt(
+        // For PAO, use provided password or prompt
+        const password = confirmationPassword || window.prompt(
           "Confirm this decision with your password:",
         );
-        return confirmationPassword
-          ? api.requisitions.decide(id, decision, confirmationPassword)
+        return password
+          ? api.requisitions.decide(id, decision, password)
           : Promise.reject(new Error("Confirmation cancelled."));
       },
       {
@@ -234,30 +264,35 @@ export function AppProvider({ children }) {
       },
     );
 
-  const createPreliminaryVoucher = (requisitionId) =>
-    runAction(() => api.issueVouchers.createPreliminary(requisitionId), {
+  const createPreliminaryVoucher = (requisitionId, requiresGateClearance = false) =>
+    runAction(() => api.issueVouchers.createPreliminary(requisitionId, { requires_gate_clearance: requiresGateClearance }), {
       successMessage: "Preliminary voucher (Model 20) created.",
-      refreshKeys: ["issueVouchers", "auditLogs"],
+      refreshKeys: ["issueVouchers", "requisitions", "auditLogs"], // Added requisitions!
     });
 
-  const amendVoucher = (id, qty) =>
-    runAction(() => api.issueVouchers.amend(id, qty), {
-      successMessage: "Voucher quantity amended.",
-      refreshKeys: ["issueVouchers", "auditLogs"],
+  const amendVoucher = (id, data) => {
+    // Support both old API (just qty) and new API (object with qty and requires_gate_clearance)
+    const payload = typeof data === 'number' ? { qty: data } : data;
+    const gateMsg = payload.requires_gate_clearance ? " (Gate clearance required)" : " (No gate clearance)";
+    return runAction(() => api.issueVouchers.amend(id, payload), {
+      successMessage: `Voucher amended successfully${gateMsg}`,
+      refreshKeys: ["issueVouchers"], // Removed auditLogs - Store Head doesn't have permission
     });
+  };
 
-  const approveVoucher = (id, decision, remarks) =>
+  const approveVoucher = (id, decision, remarks, confirmationPassword) =>
     runAction(
       () => {
-        const confirmationPassword = window.prompt(
+        // If password not provided, prompt for it (backward compatibility)
+        const password = confirmationPassword || window.prompt(
           "Confirm this voucher decision with your password:",
         );
-        return confirmationPassword
+        return password
           ? api.issueVouchers.approve(
               id,
               decision,
               remarks,
-              confirmationPassword,
+              password,
             )
           : Promise.reject(new Error("Confirmation cancelled."));
       },
@@ -559,6 +594,10 @@ export function AppProvider({ children }) {
       addGoodsReceipt,
       evaluateGoodsReceipt,
       generateGRN,
+      // NEW: Delegation workflow
+      approveForGRN,
+      executeGRN,
+      verifyPhysicalStock,
       addRequisition,
       decideRequisition,
       createPreliminaryVoucher,

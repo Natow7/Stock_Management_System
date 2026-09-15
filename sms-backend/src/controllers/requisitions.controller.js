@@ -18,6 +18,9 @@ async function list(req, res) {
   } else if (req.user.role === "Requesting Staff") {
     params.push(req.user.id);
     conditions.push(`sr.requested_by = $${params.length}`);
+  } else if (req.user.role === "Stock Clerk") {
+    // Stock Clerks see ALL requisitions (read-only view for awareness)
+    // No filtering - they need to see all requests across all stores and statuses
   } else {
     const storeIds = await assignedStoreIds(req.user);
     if (storeIds) {
@@ -28,11 +31,18 @@ async function list(req, res) {
 
   const scope = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
   const rows = await pool.query(
-    `SELECT sr.*, i.name AS item_name, s.name AS store_name, u.name AS requested_by_name
+    `SELECT sr.*, 
+       i.name AS item_name, 
+       s.name AS store_name, 
+       u.name AS requested_by_name,
+       iv.id IS NOT NULL AS voucher_created,
+       iv.ref_no AS voucher_ref_no,
+       iv.status AS voucher_status
      FROM store_requisitions sr
      JOIN items i ON i.id = sr.item_id
      JOIN stores s ON s.id = sr.store_id
      JOIN users u ON u.id = sr.requested_by
+     LEFT JOIN issue_vouchers iv ON iv.requisition_id = sr.id
     ${scope}
     ORDER BY sr.created_at DESC`,
     params,
@@ -41,13 +51,39 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  const { department, storeId, itemId, qty } = req.body;
+  const { 
+    department, 
+    storeId, 
+    itemId, 
+    qty, 
+    requiresGateClearance,
+    gc_collector_name,
+    gc_collector_id_number,
+    gc_collector_phone,
+    gc_vehicle_registration,
+    gc_scheduled_pickup_date,
+    gc_scheduled_pickup_time,
+    gc_pickup_justification
+  } = req.body;
+  
   if (!department || !storeId || !itemId || !qty) {
     throw new ApiError(
       400,
       "department, storeId, itemId, and qty are required.",
     );
   }
+  
+  // Validate gate clearance fields if required
+  if (requiresGateClearance) {
+    if (!gc_collector_name || !gc_collector_id_number || !gc_collector_phone || 
+        !gc_scheduled_pickup_date || !gc_scheduled_pickup_time || !gc_pickup_justification) {
+      throw new ApiError(
+        400,
+        "All gate clearance fields (except vehicle registration) are required when materials are leaving campus.",
+      );
+    }
+  }
+  
   if (!Number.isFinite(Number(qty)) || Number(qty) <= 0) {
     throw new ApiError(400, "qty must be a positive number.");
   }
@@ -82,9 +118,14 @@ async function create(req, res) {
     }
     const refNo = generateRefNo("SR");
     const inserted = await client.query(
-      `INSERT INTO store_requisitions (ref_no, department, requested_by, store_id, item_id, qty, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING *`,
+      `INSERT INTO store_requisitions (
+        ref_no, department, requested_by, store_id, item_id, qty, status,
+        requires_gate_clearance, gc_collector_name, gc_collector_id_number, 
+        gc_collector_phone, gc_vehicle_registration, gc_scheduled_pickup_date, 
+        gc_scheduled_pickup_time, gc_pickup_justification
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+      RETURNING *`,
       [
         refNo,
         department,
@@ -95,12 +136,20 @@ async function create(req, res) {
         req.user.role === "Requesting Staff"
           ? "Pending Department Approval"
           : "Pending PAO Approval",
+        requiresGateClearance || false,
+        requiresGateClearance ? gc_collector_name : null,
+        requiresGateClearance ? gc_collector_id_number : null,
+        requiresGateClearance ? gc_collector_phone : null,
+        requiresGateClearance ? gc_vehicle_registration : null,
+        requiresGateClearance ? gc_scheduled_pickup_date : null,
+        requiresGateClearance ? gc_scheduled_pickup_time : null,
+        requiresGateClearance ? gc_pickup_justification : null,
       ],
     );
     await logAction(client, {
       user: req.user,
       module: "Requisition",
-      action: `Submitted requisition ${refNo}`,
+      action: `Submitted requisition ${refNo}${requiresGateClearance ? ' (requires gate clearance)' : ''}`,
     });
     await notifyRoles(client, {
       roles:
@@ -108,7 +157,7 @@ async function create(req, res) {
           ? ["Department Head"]
           : ["Property Administration Officer"],
       title: "Store requisition awaiting approval",
-      message: `Requisition ${refNo} requires approval.`,
+      message: `Requisition ${refNo} requires approval.${requiresGateClearance ? ' Materials will leave campus.' : ''}`,
       module: "Requisition",
       referenceId: inserted.rows[0].id,
     });

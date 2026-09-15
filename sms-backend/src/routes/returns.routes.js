@@ -27,5 +27,10 @@ router.post(
   ),
   asyncHandler(ctrl.decide),
 );
+router.post(
+  "/:id/confirm-receipt",
+  requireRole("Stock Clerk"),
+  asyncHandler(ctrl.confirmReceipt),
+);
 
 module.exports = router;

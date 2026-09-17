@@ -1,24 +1,80 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:14-alpine
-    container_name: spms-postgres
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: sms-database
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: spms
-    ports:
-      - "5433:5432"
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-spms}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./sms-backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./sms-backend/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./sms-backend/db/migrations:/docker-entrypoint-initdb.d/migrations
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - sms-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./sms-backend
+      dockerfile: Dockerfile
+    container_name: sms-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@database:5432/${DB_NAME:-spms}
+      JWT_SECRET: ${JWT_SECRET:-change_this_in_production_to_a_secure_random_string}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+    ports:
+      - "4000:4000"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./sms-backend/logs:/app/logs
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - sms-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./sms-frontend
+      dockerfile: Dockerfile
+    container_name: sms-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sms-network
+
+networks:
+  sms-network:
+    driver: bridge
 
 volumes:
   postgres_data:

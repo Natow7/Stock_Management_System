@@ -3,7 +3,9 @@
 // snake_case column names to camelCase so page components can use a single
 // consistent naming convention regardless of which SQL query produced a row.
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const BASE_URL = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api` 
+  : "http://localhost:4000/api";
 const TOKEN_KEY = "spms_token";
 
 let authToken = null;

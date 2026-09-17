@@ -20,5 +20,5 @@ EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
   CMD node -e "require('http').get('http://localhost:4000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start application with migrations
-CMD ["sh", "-c", "cd db && node migrate.js && node seed.js && cd .. && node src/server.js"]
+# Start application (database already populated on Neon)
+CMD ["node", "src/server.js"]

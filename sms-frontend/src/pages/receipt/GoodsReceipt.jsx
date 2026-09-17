@@ -11,7 +11,7 @@ import DataTable from "../../components/ui/DataTable.jsx";
 import Modal from "../../components/ui/Modal.jsx";
 import Badge from "../../components/ui/Badge.jsx";
 
-export default function GoodsReceipt() {
+export default function GoodsReceipt({ hideRecordButton = false, openModal = false, onModalClose }) {
   const {
     goodsReceipts,
     items,
@@ -23,7 +23,12 @@ export default function GoodsReceipt() {
     currentUser,
   } = useApp();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(openModal);
+  
+  // Update open state when openModal prop changes
+  React.useEffect(() => {
+    if (openModal) setOpen(true);
+  }, [openModal]);
   const [evalTarget, setEvalTarget] = useState(null);
   const [remarks, setRemarks] = useState("");
   const [saving, setSaving] = useState(false);
@@ -52,7 +57,12 @@ export default function GoodsReceipt() {
   const canRecord = [
     "Store Head",
     "Stock Clerk",
-    "Property Administration Officer",
+    "Administrator",
+  ].includes(currentUser?.role);
+  const canViewGRN = [
+    "Property Registration Officer",
+    "Store Head", 
+    "Stock Clerk",
     "Administrator",
   ].includes(currentUser?.role);
 
@@ -71,6 +81,7 @@ export default function GoodsReceipt() {
         expiryDate: "",
       });
       setOpen(false);
+      if (onModalClose) onModalClose();
     }
   }
 
@@ -112,7 +123,7 @@ export default function GoodsReceipt() {
         title="Goods Receipt, Technical Evaluation & GRN"
         description="Record incoming materials, route them to the Technical Evaluation Committee, then generate the official Goods Receiving Note (Model 19)."
         action={
-          canRecord && (
+          !hideRecordButton && canRecord && (
             <Button onClick={() => setOpen(true)}>
               <Plus size={16} /> Record Goods Receipt
             </Button>
@@ -164,7 +175,7 @@ export default function GoodsReceipt() {
                 {r.status === "Awaiting Evaluation" && isTEC && (
                   <button
                     onClick={() => setEvalTarget(r)}
-                    className="text-xs font-medium text-navy-700 hover:underline"
+                    className="text-xs font-medium text-blue-700 dark:text-blue-400 hover:underline"
                   >
                     Evaluate
                   </button>
@@ -172,13 +183,21 @@ export default function GoodsReceipt() {
                 {r.status === "Approved" && canFinalize && (
                   <button
                     onClick={() => openGrnModal(r)}
-                    className="flex items-center gap-1 text-xs font-medium text-emerald-700 hover:underline"
+                    className="flex items-center gap-1 text-xs font-medium text-emerald-700 dark:text-emerald-400 hover:underline"
                   >
-                    <FileText size={12} /> Generate GRN (Model 19)
+                    <FileText size={12} /> Generate GRN
                   </button>
                 )}
-                {(r.status === "GRN Generated" || r.status === "Rejected") && (
-                  <span className="text-xs text-slate-300">—</span>
+                {r.status === "Verified" && r.grnNumber && canViewGRN && (
+                  <button
+                    onClick={() => window.open(`/reports/grn/${r.id}`, '_blank')}
+                    className="flex items-center gap-1 text-xs font-medium text-indigo-700 dark:text-indigo-400 hover:underline"
+                  >
+                    <FileText size={12} /> View GRN
+                  </button>
+                )}
+                {(r.status === "GRN Generated" || r.status === "Rejected" || r.status === "Awaiting PRO Approval" || r.status === "PRO Approved" || r.status === "Awaiting Store Head Verification") && (
+                  <span className="text-xs text-slate-400">In Progress</span>
                 )}
               </div>
             ),
@@ -190,28 +209,28 @@ export default function GoodsReceipt() {
       {/* Record Goods Receipt Modal */}
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          if (onModalClose) onModalClose();
+        }}
         title="Record Goods Receipt"
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button form="gr-form" type="submit" disabled={saving}>
-              {saving ? "Submitting…" : "Submit for TEC Evaluation"}
-            </Button>
-          </>
-        }
       >
-        <form id="gr-form" onSubmit={submit}>
-          <Field label="Supplier / Donor">
+        <form id="gr-form" onSubmit={submit} className="space-y-4">
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-3 mb-4">
+            <p className="text-xs text-blue-700 dark:text-blue-300">
+              <strong>Recording Delivery:</strong> Documents incoming materials for TEC evaluation and GRN generation.
+            </p>
+          </div>
+
+          <Field label="Supplier / Donor *" htmlFor="supplierId">
             <select
+              id="supplierId"
               required
               className={inputCls}
               value={form.supplierId}
               onChange={(e) => setForm({ ...form, supplierId: e.target.value })}
             >
-              <option value="">Select a supplier…</option>
+              <option value="">Select supplier or donor...</option>
               {suppliers.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -219,14 +238,16 @@ export default function GoodsReceipt() {
               ))}
             </select>
           </Field>
-          <Field label="Receiving Store">
+
+          <Field label="Receiving Store *" htmlFor="storeId">
             <select
+              id="storeId"
               required
               className={inputCls}
               value={form.storeId}
               onChange={(e) => setForm({ ...form, storeId: e.target.value })}
             >
-              <option value="">Select a store…</option>
+              <option value="">Select receiving store...</option>
               {stores.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name} ({s.code})
@@ -234,14 +255,16 @@ export default function GoodsReceipt() {
               ))}
             </select>
           </Field>
-          <Field label="Material Received">
+
+          <Field label="Material Received *" htmlFor="itemId">
             <select
+              id="itemId"
               required
               className={inputCls}
               value={form.itemId}
               onChange={(e) => setForm({ ...form, itemId: e.target.value })}
             >
-              <option value="">Select a material…</option>
+              <option value="">Select material...</option>
               {items.map((i) => (
                 <option key={i.id} value={i.id}>
                   {i.name} ({i.unit})
@@ -249,41 +272,70 @@ export default function GoodsReceipt() {
               ))}
             </select>
           </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Quantity Received">
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Quantity *" htmlFor="qty">
               <input
+                id="qty"
                 type="number"
-                min="1"
+                min="0.01"
+                step="0.01"
                 required
                 className={inputCls}
                 value={form.qty}
                 onChange={(e) => setForm({ ...form, qty: e.target.value })}
+                placeholder="e.g., 100"
               />
             </Field>
-            <Field label="Purchase / Donation Ref.">
+            <Field label="PO / Donation Ref. *" htmlFor="poReference">
               <input
+                id="poReference"
                 required
                 className={inputCls}
                 value={form.poReference}
                 onChange={(e) =>
                   setForm({ ...form, poReference: e.target.value })
                 }
-                placeholder="PO-2026-00xx"
+                placeholder="e.g., PO-2026-001"
               />
             </Field>
           </div>
-          <Field label="Batch Expiry Date (optional)">
+
+          <Field label="Batch Expiry Date (Optional)" htmlFor="expiryDate">
             <input
+              id="expiryDate"
               type="date"
               className={inputCls}
               value={form.expiryDate}
               onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
             />
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              For perishable items or items with shelf life
+            </p>
           </Field>
-          <p className="mt-1 text-xs text-slate-400">
-            This creates an official receipt record. The Technical Evaluation
-            Committee will be notified automatically for physical inspection.
-          </p>
+
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-3">
+            <p className="text-xs text-green-700 dark:text-green-300">
+              <strong>Next Step:</strong> TEC will be notified to evaluate material quality and specifications.
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4">
+            <Button 
+              type="button" 
+              onClick={() => {
+                setOpen(false);
+                if (onModalClose) onModalClose();
+              }} 
+              variant="ghost" 
+              disabled={saving}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Submitting..." : "Submit for TEC Evaluation"}
+            </Button>
+          </div>
         </form>
       </Modal>
 

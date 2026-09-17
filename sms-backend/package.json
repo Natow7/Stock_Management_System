@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "University Stock and Property Management System — backend API and PostgreSQL schema",
+  "author": "Natow7",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

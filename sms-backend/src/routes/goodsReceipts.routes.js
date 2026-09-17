@@ -13,7 +13,6 @@ router.post(
   requireRole(
     "Store Head",
     "Stock Clerk",
-    "Property Administration Officer",
     "Administrator",
   ),
   asyncHandler(ctrl.create),
@@ -23,6 +22,35 @@ router.post(
   requireRole("Technical Evaluation Committee", "Administrator"),
   asyncHandler(ctrl.evaluate),
 );
+
+// ============================================================================
+// NEW DELEGATION WORKFLOW ENDPOINTS
+// ============================================================================
+
+// STEP 1: PRO approves receipt for GRN generation
+router.post(
+  "/:id/approve-for-grn",
+  requireRole("Property Registration Officer", "Administrator"),
+  asyncHandler(ctrl.approveForGRN),
+);
+
+// STEP 2: Stock Clerk executes GRN generation (FIFO, bin cards, stock update)
+router.post(
+  "/:id/execute-grn",
+  requireRole("Stock Clerk", "Administrator"),
+  asyncHandler(ctrl.executeGRN),
+);
+
+// STEP 3: Store Head verifies physical stock
+router.post(
+  "/:id/verify-physical-stock",
+  requireRole("Store Head", "Administrator"),
+  asyncHandler(ctrl.verifyPhysicalStock),
+);
+
+// ============================================================================
+// OLD WORKFLOW ENDPOINT (Deprecated - kept for backward compatibility)
+// ============================================================================
 router.post(
   "/:id/generate-grn",
   requireRole("Property Registration Officer"),

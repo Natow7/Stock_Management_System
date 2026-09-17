@@ -1,6 +1,9 @@
 # Stock Management System (SPMS)
 
-Ethiopia University Property Management System
+Modern University Property Management System
+
+**Developer:** Natow7  
+**Portfolio Project:** Full-stack stock management with role-based workflows
 
 ---
 

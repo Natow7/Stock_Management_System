@@ -1,6 +1,10 @@
 # Frontend Dockerfile - Multi-stage build
 FROM node:18-alpine AS builder
 
+# Build argument to pass environment variable at build time
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 WORKDIR /app
 
 # Copy package files

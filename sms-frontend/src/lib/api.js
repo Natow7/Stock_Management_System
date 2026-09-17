@@ -170,6 +170,7 @@ const api = {
   items: {
     list: () => request("/items"),
     create: (data) => request("/items", { method: "POST", body: data }),
+    getAvailability: (id) => request(`/items/${id}/availability`),
   },
 
   suppliers: {
@@ -182,7 +183,7 @@ const api = {
   },
 
   goodsReceipts: {
-    list: () => request("/goods-receipts"),
+    list: (params) => request(`/goods-receipts${qs(params)}`),
     create: (data) =>
       request("/goods-receipts", { method: "POST", body: data }),
     evaluate: (id, data) =>
@@ -191,6 +192,22 @@ const api = {
       request(`/goods-receipts/${id}/generate-grn`, {
         method: "POST",
         body: data || {},
+      }),
+    // NEW: Delegation workflow endpoints
+    approveForGrn: (id, data) =>
+      request(`/goods-receipts/${id}/approve-for-grn`, {
+        method: "POST",
+        body: data,
+      }),
+    executeGrn: (id, data) =>
+      request(`/goods-receipts/${id}/execute-grn`, {
+        method: "POST",
+        body: data,
+      }),
+    verifyPhysicalStock: (id, data) =>
+      request(`/goods-receipts/${id}/verify-physical-stock`, {
+        method: "POST",
+        body: data,
       }),
   },
 
@@ -217,13 +234,13 @@ const api = {
 
   issueVouchers: {
     list: () => request("/issue-vouchers"),
-    createPreliminary: (requisitionId) =>
+    createPreliminary: (requisitionId, data = {}) =>
       request("/issue-vouchers/preliminary", {
         method: "POST",
-        body: { requisitionId },
+        body: { requisitionId, ...data },
       }),
-    amend: (id, qty) =>
-      request(`/issue-vouchers/${id}/amend`, { method: "POST", body: { qty } }),
+    amend: (id, data) =>
+      request(`/issue-vouchers/${id}/amend`, { method: "POST", body: data }),
     approve: (id, decision, remarks, confirmationPassword) =>
       request(`/issue-vouchers/${id}/approve`, {
         method: "POST",
@@ -264,6 +281,11 @@ const api = {
       request(`/returns/${id}/decide`, {
         method: "POST",
         body: { decision, confirmationPassword },
+      }),
+    confirmReceipt: (id, receivedQty, condition, remarks, confirmationPassword) =>
+      request(`/returns/${id}/confirm-receipt`, {
+        method: "POST",
+        body: { receivedQty, condition, remarks, confirmationPassword },
       }),
   },
 
@@ -318,6 +340,25 @@ const api = {
     valuation: (itemId) => request(`/stock-control/valuation${qs({ itemId })}`),
   },
 
+  gateClearance: {
+    list: () => request("/gate-clearance-requests"),
+    create: (data) =>
+      request("/gate-clearance-requests", { method: "POST", body: data }),
+    cancel: (id) =>
+      request(`/gate-clearance-requests/${id}/cancel`, { method: "POST" }),
+    approve: (id, security_notes) =>
+      request(`/gate-clearance-requests/${id}/approve`, {
+        method: "POST",
+        body: { security_notes },
+      }),
+    reject: (id, rejection_reason, security_notes) =>
+      request(`/gate-clearance-requests/${id}/reject`, {
+        method: "POST",
+        body: { rejection_reason, security_notes },
+      }),
+    listClearances: () => request("/gate-clearance-requests/clearances"),
+  },
+
   reports: {
     generate: (type) => request(`/reports/${type}`),
     export: (type, format) => download(`/reports/${type}/${format}`),
@@ -336,9 +377,25 @@ const api = {
   },
 
   notifications: {
-    list: () => request("/notifications"),
+    list: (params) => request("/notifications" + (params ? `?${new URLSearchParams(params)}` : "")),
+    summary: () => request("/notifications/summary"),
+    byModule: () => request("/notifications/by-module"),
+    byEntityType: (entityType) => request(`/notifications/by-entity/${entityType}`),
+    statistics: () => request("/notifications/statistics"),
     markRead: (id) => request(`/notifications/${id}/read`, { method: "POST" }),
+    markMultipleRead: (notificationIds) => 
+      request("/notifications/batch/read", { 
+        method: "POST", 
+        body: JSON.stringify({ notificationIds }) 
+      }),
     markAllRead: () => request("/notifications/read-all", { method: "POST" }),
+    markModuleRead: (module) => request(`/notifications/module/${module}/read`, { method: "POST" }),
+    deleteNotification: (id) => request(`/notifications/${id}`, { method: "DELETE" }),
+    deleteMultiple: (notificationIds) => 
+      request("/notifications/batch/delete", { 
+        method: "POST", 
+        body: JSON.stringify({ notificationIds }) 
+      }),
   },
 };
 

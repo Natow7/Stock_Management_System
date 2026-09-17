@@ -5,6 +5,9 @@ FROM node:18-alpine AS builder
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
+# Break cache with timestamp
+RUN echo "Build timestamp: $(date)" > /tmp/buildtime
+
 WORKDIR /app
 
 # Copy package files

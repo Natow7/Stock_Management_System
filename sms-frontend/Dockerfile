@@ -5,8 +5,8 @@ FROM node:18-alpine AS builder
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
-# Break cache with timestamp
-RUN echo "Build timestamp: $(date)" > /tmp/buildtime
+# Break cache with timestamp - Force rebuild on 2026-09-18
+RUN echo "Build timestamp: 2026-09-18-22:15:00" > /tmp/buildtime
 
 WORKDIR /app
 

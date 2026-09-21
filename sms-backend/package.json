@@ -10,7 +10,9 @@
     "dev": "nodemon src/server.js",
     "migrate": "node db/migrate.js",
     "seed": "node db/seed.js",
-    "perf": "node scripts/performance-check.js"
+    "perf": "node scripts/performance-check.js",
+    "security:audit": "node scripts/security-audit.js",
+    "security:migrate": "node scripts/run-single-migration.js 005_add_rate_limiting.sql"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",

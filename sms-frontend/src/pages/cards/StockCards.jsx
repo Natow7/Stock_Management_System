@@ -37,15 +37,15 @@ export default function StockCards() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-1 overflow-hidden">
-          <div className="bg-gradient-to-r from-university-600 to-university-700 dark:from-university-900 dark:to-university-950 px-5 py-4">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/80 dark:from-slate-800 dark:to-slate-850 px-5 py-4 border-b border-blue-200/50 dark:border-slate-700">
             <div className="flex items-center gap-3">
-              <div className="flex-1 flex items-center gap-2 bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/20 dark:border-white/10">
-                <Search size={16} className="text-white/70 dark:text-white/60 flex-shrink-0" />
+              <div className="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-700">
+                <Search size={16} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)} 
                   placeholder="Search materials…" 
-                  className="w-full bg-transparent border-0 text-sm font-medium text-white placeholder:text-white/60 dark:placeholder:text-white/50 focus:ring-0 focus:outline-none" 
+                  className="w-full bg-transparent border-0 text-sm font-medium text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0 focus:outline-none" 
                 />
               </div>
             </div>
@@ -107,22 +107,22 @@ export default function StockCards() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-2 overflow-hidden">
-          <div className="bg-gradient-to-r from-university-600 to-university-700 dark:from-university-900 dark:to-university-950 px-6 py-5">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/80 dark:from-slate-800 dark:to-slate-850 px-6 py-5 border-b border-blue-200/50 dark:border-slate-700">
             {card ? (
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-white mb-1 truncate">{card.item.name}</h3>
-                  <p className="text-xs font-semibold text-university-100 dark:text-university-200 truncate">{card.item.code}</p>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1 truncate">{card.item.name}</h3>
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 truncate">{card.item.code}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className="inline-flex flex-col items-end bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20 dark:border-white/10">
-                    <p className="text-3xl font-extrabold text-white leading-none mb-1">{card.item.qtyOnHand}</p>
-                    <p className="text-xs font-bold text-university-100 dark:text-university-200 uppercase tracking-wider">{card.item.unit} on Hand</p>
+                  <div className="inline-flex flex-col items-end bg-white dark:bg-slate-800/50 rounded-xl px-4 py-2.5 border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <p className="text-3xl font-extrabold text-university-700 dark:text-university-400 leading-none mb-1">{card.item.qtyOnHand}</p>
+                    <p className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">{card.item.unit} on Hand</p>
                   </div>
                 </div>
               </div>
             ) : (
-              <h3 className="text-lg font-bold text-white">Stock Card Details</h3>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white">Stock Card Details</h3>
             )}
           </div>
           

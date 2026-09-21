@@ -35,14 +35,29 @@ const allowedOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+
+// CORS Configuration
+// In production, checks CORS_ORIGINS environment variable
+// If CORS_ORIGINS is empty, allows all origins (for development/testing)
 app.use(
   cors({
     origin:
       process.env.NODE_ENV === "production"
         ? (origin, callback) => {
-            if (!origin || allowedOrigins.includes(origin))
-              return callback(null, true);
-            return callback(new Error("Origin is not allowed by CORS."));
+            // Allow requests with no origin (like mobile apps, curl, Postman)
+            if (!origin) return callback(null, true);
+            
+            // If CORS_ORIGINS is configured, use strict checking
+            if (allowedOrigins.length > 0) {
+              if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+              }
+              return callback(new Error("Origin is not allowed by CORS."));
+            }
+            
+            // If CORS_ORIGINS is not set, allow all origins (fallback for testing)
+            console.warn(`⚠️  CORS_ORIGINS not configured. Allowing origin: ${origin}`);
+            return callback(null, true);
           }
         : true,
   }),

@@ -80,32 +80,32 @@ export default function BinCards() {
                 onClick={() => setSelected(b.id)}
                 className={`group relative block w-full border-b border-slate-100 dark:border-slate-800 px-5 py-4 text-left transition-all duration-200 last:border-0 ${
                   selected === b.id 
-                    ? "bg-gradient-to-r from-university-50/80 to-university-100/50 dark:from-university-950/30 dark:to-university-900/20 shadow-sm" 
-                    : "hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
+                    ? "bg-slate-50/70 dark:bg-slate-800/30" 
+                    : "hover:bg-slate-50/50 dark:hover:bg-slate-800/20"
                 }`}
               >
                 {selected === b.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-university-600 to-university-700 dark:from-university-500 dark:to-university-600"></div>
+                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-university-600 dark:bg-university-500"></div>
                 )}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm font-bold mb-1.5 truncate ${
                       selected === b.id 
-                        ? "text-university-900 dark:text-university-100" 
-                        : "text-slate-800 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white"
+                        ? "text-slate-900 dark:text-white" 
+                        : "text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white"
                     }`}>
                       {b.bin}
                     </p>
                     <p className={`text-xs font-medium mb-1 truncate ${
                       selected === b.id 
-                        ? "text-university-700 dark:text-university-300" 
+                        ? "text-slate-700 dark:text-slate-300" 
                         : "text-slate-600 dark:text-slate-400"
                     }`}>
                       {b.storeName}
                     </p>
                     <p className={`text-xs truncate ${
                       selected === b.id 
-                        ? "text-university-600 dark:text-university-400" 
+                        ? "text-slate-600 dark:text-slate-400" 
                         : "text-slate-500 dark:text-slate-500"
                     }`}>
                       {b.itemName}
@@ -113,7 +113,7 @@ export default function BinCards() {
                   </div>
                   {selected === b.id && (
                     <div className="flex-shrink-0">
-                      <div className="w-2 h-2 rounded-full bg-university-600 dark:bg-university-400 animate-pulse"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-university-600 dark:bg-university-500"></div>
                     </div>
                   )}
                 </div>

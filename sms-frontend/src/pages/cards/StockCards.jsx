@@ -37,7 +37,7 @@ export default function StockCards() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-1 overflow-hidden">
-          <div className="bg-blue-50/50 dark:bg-slate-800 px-5 py-4 border-b border-slate-200 dark:border-slate-700">
+          <div className="bg-blue-50 dark:bg-slate-800 px-5 py-4 border-b border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-3">
               <div className="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-200 dark:border-slate-700">
                 <Search size={16} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
@@ -107,7 +107,7 @@ export default function StockCards() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-2 overflow-hidden">
-          <div className="bg-blue-50/50 dark:bg-slate-800 px-6 py-5 border-b border-slate-200 dark:border-slate-700">
+          <div className="bg-blue-50 dark:bg-slate-800 px-6 py-5 border-b border-slate-200 dark:border-slate-700">
             {card ? (
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">

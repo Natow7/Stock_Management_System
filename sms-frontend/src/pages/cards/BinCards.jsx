@@ -62,7 +62,7 @@ export default function BinCards() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-1 overflow-hidden">
-          <div className="bg-blue-50/50 dark:bg-slate-800 px-5 py-4 border-b border-slate-200 dark:border-slate-700">
+          <div className="bg-blue-50 dark:bg-slate-800 px-5 py-4 border-b border-slate-200 dark:border-slate-700">
             <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 tracking-wide">Select Bin Location</h3>
           </div>
           <div className="max-h-[560px] overflow-y-auto">
@@ -123,7 +123,7 @@ export default function BinCards() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm lg:col-span-2 overflow-hidden">
-          <div className="bg-blue-50/50 dark:bg-slate-800 px-6 py-5 border-b border-slate-200 dark:border-slate-700">
+          <div className="bg-blue-50 dark:bg-slate-800 px-6 py-5 border-b border-slate-200 dark:border-slate-700">
             {card ? (
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
